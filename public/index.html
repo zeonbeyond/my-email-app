@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Firstmail Client</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-2xl mx-auto bg-white shadow rounded-lg p-6">
+        <h1 class="text-2xl font-bold mb-4">Inbox</h1>
+        <button onclick="loadEmails()" class="bg-blue-500 text-white px-4 py-2 rounded mb-4">Refresh</button>
+        <div id="emailList" class="divide-y divide-gray-200">
+            </div>
+    </div>
+
+    <script>
+        async function loadEmails() {
+            const list = document.getElementById('emailList');
+            list.innerHTML = 'Loading...';
+            const res = await fetch('/api/emails');
+            const data = await res.json();
+            
+            list.innerHTML = data.map(mail => `
+                <div class="py-3 cursor-pointer hover:bg-gray-50">
+                    <p class="font-bold">${mail.subject}</p>
+                    <p class="text-sm text-gray-500">${mail.from}</p>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>
